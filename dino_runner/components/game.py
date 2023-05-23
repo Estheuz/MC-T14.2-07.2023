@@ -1,43 +1,36 @@
-import pygame, random
+import pygame
+import random
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD, BIRD
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, CLOUD
 from dino_runner.components.dinosaur import Dinosaur
-from dino_runner.components.bird import Bird
-from dino_runner.components.cactus import Cactus
+from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
+from dino_runner.components.obstacles.bird import Bird
 
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.font.init()
         pygame.display.set_caption(TITLE)
         pygame.display.set_icon(ICON)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
-        self.contador = 0
+        
         self.player = Dinosaur()
-        self.enemy_bird = Bird()
-        self.enemy_cactus = Cactus()
-
-        self.fonte= pygame.font.SysFont('arial', 30, True, True)
- 
+        self.obstacle_manager = ObstacleManager()
+        self.bird = Bird()
+        
         self.playing = False
         self.game_speed = 20
         self.x_pos_bg = 0
         self.y_pos_bg = 380
-
-        self.coor_clouds = []
-
-        for cl in range(6):
-         self.x_pos_cloud = random.randint(0, 1000)
-         self.y_pos_cloud = random.randint(0, 200)
-         self.coor_clouds.append([self.x_pos_cloud, self.y_pos_cloud])
-
+        
+        self.cloud_y_pos = random.randint(100, 250)
+        self.cloud_x_pos = random.randint(SCREEN_WIDTH, SCREEN_WIDTH + 100)
+        
 
     def run(self):
         # Game loop: events - update - draw
         self.playing = True
         while self.playing:
-            self.contador = self.contador + 1
             self.events()
             self.update()
             self.draw()
@@ -52,17 +45,18 @@ class Game:
         
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
-        self.enemy_bird.update()
-        self.enemy_cactus.update()
+        self.obstacle_manager.update(self)
+        self.bird.update()
+        
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
-        self.crono()
+        self.draw_simple_cloud()
         self.player.draw(self.screen)
-        self.enemy_bird.draw(self.screen)
-        self.enemy_cactus.draw(self.screen)
+        self.obstacle_manager.draw(self.screen)
+        self.bird.draw(self.screen)
         
         pygame.display.flip()
 
@@ -74,14 +68,18 @@ class Game:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
             self.x_pos_bg = 0
         self.x_pos_bg -= self.game_speed
+
+    def draw_simple_cloud(self):
+        cloud_image_width = CLOUD.get_width()
+        self.screen.blit(CLOUD, (self.cloud_x_pos, self.cloud_y_pos))
         
-        for position_cloud in self.coor_clouds:
-       
-            self.screen.blit(CLOUD, position_cloud)
-            position_cloud[0] -= 0.8
-            if position_cloud[0] < -55:
-                position_cloud[0] = 1150
-    def crono(self):
-         self.mensagem = f'{self.contador}m'
-         self.texto_formatado = self.fonte.render(self.mensagem, False, (0,0,0))
-         self.screen.blit(self.texto_formatado, (800,32))
+        if self.cloud_x_pos <= -cloud_image_width:
+            self.cloud_x_pos = SCREEN_WIDTH + random.randint(0,50)
+            self.cloud_y_pos = random.randint(100, 250)
+            self.screen.blit(CLOUD, (self.cloud_x_pos, self.cloud_y_pos))
+        
+        self.cloud_x_pos -=self.game_speed
+            
+            
+        
+        
