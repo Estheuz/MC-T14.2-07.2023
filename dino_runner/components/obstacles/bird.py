@@ -1,63 +1,39 @@
+import random
 
-from dino_runner.utils.constants import BIRD
+from dino_runner.components.obstacles.obstacle import Obstacle
+from dino_runner.utils.constants import OBSTACLE_Y_POS
 
-X_POS = 1200
-Y_POS = 600
-BIRD_VEL = 7
-
-
-class Bird:
-    def __init__(self):
-        self.image_bird = BIRD[0]
-        self.bird_rect = self.image_bird.get_rect()
-
-        self.bird_rect.y = Y_POS
-        self.bird_rect.x = X_POS
-
-        self.step_count = 0
-        self.bird_run = True
-        self.bird_vel = BIRD_VEL
-
-
-    def update(self):
+class Bird(Obstacle):
+    def __init__(self, images):
+        super().__init__(images[0]) #iniciando com uma imagem inicial
         
-        if self.bird_run:
-            self.bird()
+        self.ini_y_pos = random.randint(150,320)
+        self.images = images #array de images
+        self.rect.y = self.ini_y_pos #desenhando no ar
+        self.flying_index = 0 #usado para mudar a imagen
         
-        if self.step_count > 5:
-            self.step_count = 0
-
+    #    self.touched_ground = False
+    #    self.moving = random.randint(1,2) % 2 == 0 and True or False
+            
+    def update(self, game_speed, obstacles):
+        self.fly()
         
-        if self.bird_rect.y <= 100:
-            self.bird_down = True
-            self.bird_up = False
-            self.move()
-
-        elif self.bird_rect.y >= 300:
-            self.bird_down = False
-            self.bird_up = True
-            self.move()
+        if self.flying_index > 9:
+            self.flying_index = 0
         
-    
-    def bird(self):
-        self.image_bird = BIRD[self.step_count//3]
-        self.step_count+=1
-    
-    def draw(self, screen):
-        self.bird_rect.x -= BIRD_VEL 
-        self.bird_rect.y -= BIRD_VEL
-        if self.bird_rect.x < 6:
-          self.bird_rect.x = 1200
-
+        super().update(game_speed, obstacles)
         
-        screen.blit(self.image_bird,(self.bird_rect.x, self.bird_rect.y))
-
-    def move(self):
-        if self.bird_up == True and self.bird_down == False:
-            self.bird_rect.y -= BIRD_VEL
-
-        elif self.bird_down == True and self.bird_up == False:
-            self.bird_rect.y += BIRD_VEL
-
-
-
+    def fly(self):
+        self.image = self.images[self.flying_index//5]
+        self.flying_index += 1
+        
+     #   if self.moving:
+      #      if not self.touched_ground:
+       #         self.rect.y +=10
+        #        if self.rect.y > OBSTACLE_Y_POS:
+         #           self.touched_ground = True
+          #  else:
+           #     self.rect.y -= 10
+            #    if self.rect.y < self.ini_y_pos:
+             #       self.touched_ground = False
+        
