@@ -2,13 +2,12 @@ import pygame
 import os
 
 # Global Constants
-TITLE = "Chrome Dino Runner"
+TITLE = "Maratona"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 FPS = 30
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
-
-IMG_SCREEN_START = pygame.image.load(os.path.join(IMG_DIR, "Other/StartScreen.png"))
+pygame.mixer.init()
 
 FONT_STYLE = "freesansbold.ttf"
 
@@ -24,18 +23,18 @@ RUNNING = [
 ]
 
 RUNNING_SHIELD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun1Shield.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-Shield1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-Shield2.png")),
 ]
 
 RUNNING_HAMMER = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoRun2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-Hammer1.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-Hammer2.png")),
 ]
 
 JUMPING = pygame.image.load(os.path.join(IMG_DIR, "Dino/RomanJump.png"))
-JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpShield.png"))
-JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoJumpHammer.png"))
+JUMPING_SHIELD = pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-ShieldJump.png"))
+JUMPING_HAMMER = pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-HammerJump.png"))
 
 DUCKING = [
     pygame.image.load(os.path.join(IMG_DIR, "Dino/RomanDash.png")),
@@ -43,13 +42,13 @@ DUCKING = [
 ]
 
 DUCKING_SHIELD = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Shield.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/RomanShieldDash.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/RomanShieldDash.png")),
 ]
 
 DUCKING_HAMMER = [
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck1Hammer.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Dino/DinoDuck2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-HammerDash.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Dino/Roman-HammerDash.png")),
 ]
 
 SMALL_CACTUS = [
@@ -60,7 +59,7 @@ SMALL_CACTUS = [
 LARGE_CACTUS = [
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/zLance1.png")),
     pygame.image.load(os.path.join(IMG_DIR, "Cactus/zLance2.png")),
-    pygame.image.load(os.path.join(IMG_DIR, "Cactus/zLance2.png")),
+    pygame.image.load(os.path.join(IMG_DIR, "Cactus/zLance1.png")),
 ]
 
 BIRD = [
@@ -69,11 +68,24 @@ BIRD = [
 ]
 
 CLOUD = pygame.image.load(os.path.join(IMG_DIR, 'Other/Cloud.png'))
-SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/shield.png'))
-HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/hammer.png'))
+SHIELD = pygame.image.load(os.path.join(IMG_DIR, 'Other/roman-shield.png'))
+HAMMER = pygame.image.load(os.path.join(IMG_DIR, 'Other/roman-sword.png'))
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
-HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
+VICORY = pygame.image.load(os.path.join(IMG_DIR, 'Other/victory.png'))
+START_SCREEN = pygame.image.load(os.path.join(IMG_DIR, 'Other/Start-Screen.png'))
+
+LOSE_SCREEN = pygame.image.load(os.path.join(IMG_DIR, 'Other/lose.png'))
 
 DEFAULT_TYPE = "default"
+SHIELD_TYPE = "shield"
+HAMMER_TYPE = "hammer"
+
+
+SOUND_JUMP = pygame.mixer.Sound(os.path.join(IMG_DIR, 'Sounds/smw_jump.wav'))
+SOUND_ATTACK = pygame.mixer.Sound(os.path.join(IMG_DIR, 'Sounds/smw_kick.wav'))
+SOUND_UPGRADE = pygame.mixer.Sound(os.path.join(IMG_DIR, 'Sounds/smw_power-up.wav'))
+SOUND_WIN = pygame.mixer.Sound(os.path.join(IMG_DIR, 'Sounds/smw_princess_help.wav'))
+SOUND_LOSE = pygame.mixer.Sound(os.path.join(IMG_DIR, 'Sounds/smw_lost_a_life.wav'))
+SOUND_DASH = pygame.mixer.Sound(os.path.join(IMG_DIR, 'Sounds/smw_yoshi_runs_away.wav'))

@@ -3,7 +3,7 @@ import pygame
 
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
-from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD
+from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD, SOUND_ATTACK,SOUND_LOSE
 
 
 class ObstacleManager:
@@ -26,9 +26,15 @@ class ObstacleManager:
             obstacle.update(game.game_speed, self.obstacles)
             
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(500)
-                game.playing = False
-                game.death_count += 1
+                if not game.player.has_power_up:
+                    pygame.time.delay(800)
+                    game.playing = False
+                    game.death_count += 1
+                    SOUND_LOSE.play()
+                else:
+                    self.obstacles.remove(obstacle)
+                    pygame.time.delay(10)
+                    SOUND_ATTACK.play()
             
         
     def draw(self,screen):

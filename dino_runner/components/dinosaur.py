@@ -1,6 +1,12 @@
 import pygame
 
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, SCREEN_WIDTH
+from dino_runner.utils.constants import SOUND_JUMP,RUNNING, JUMPING, DUCKING, SCREEN_WIDTH, DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, DUCKING_SHIELD,JUMPING_SHIELD, DUCKING_HAMMER, JUMPING_HAMMER,RUNNING_HAMMER, HAMMER_TYPE
+
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE : RUNNING_HAMMER}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE : DUCKING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE : JUMPING_HAMMER}
+
+
 
 Y_POS = 310
 Y_POS_DUCK = 340
@@ -10,7 +16,12 @@ WALK = 5
 
 class Dinosaur:
     def __init__(self):
-        self.image = RUNNING[0]
+
+        self.type = DEFAULT_TYPE
+        self.image = RUN_IMG[DEFAULT_TYPE][0]
+        self.has_power_up = False
+        self.power_up_time_up = 0
+        
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = 10
         self.dino_rect.y = Y_POS
@@ -33,10 +44,11 @@ class Dinosaur:
         if user_input[pygame.K_UP] and self.dino_rect.y == Y_POS:
             self.dino_run = False
             self.dino_jump = True
+            SOUND_JUMP.play()
+
         elif user_input[pygame.K_DOWN]:
             self.dino_duck = True
             self.dino_run = False
-
         elif not self.dino_jump:
             self.dino_run = True
             
@@ -51,14 +63,16 @@ class Dinosaur:
             self.step_count = 0
     
     def run(self):
-        self.image = RUNNING[self.step_count//5]
+        self.image = RUN_IMG[self.type][self.step_count//5]
         self.dino_rect.y = Y_POS
         
         self.step_count+=1
     
     def duck(self):
-        self.image = DUCKING[self.step_count//5]
+        self.image = DUCK_IMG[self.type][self.step_count//5]
+        self.dino_rect.y = Y_POS_DUCK
         self.dino_rect.y = 370
+        
         for c in range(40):
             self.dino_rect.x += 0.8
 
@@ -68,7 +82,7 @@ class Dinosaur:
         self.step_count+=1
     
     def jump(self):
-        self.image = JUMPING
+        self.image = JUMP_IMG[self.type]
         
         if self.dino_jump:
             self.dino_rect.y -= self.jump_vel*4
